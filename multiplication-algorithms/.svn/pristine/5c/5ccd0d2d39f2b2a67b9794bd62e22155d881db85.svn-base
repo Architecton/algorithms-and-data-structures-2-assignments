@@ -1,0 +1,12 @@
+Izvajanje testM-A-1
+  Log datoteka: testM-A-1.log
+  Izhod programa: testM-A-1.out
+  Ukazna vrstica: java Naloga2 mat os
+  Izhodni status: 1
+  Realni cas izvajanja: 152
+  Uporabniski cas izvajanja: 131
+  Sistemski cas izvajanja: 29
+  Procesorski cas izvajanja: 160
+Preverjanje testM-A-1
+  Izhodni status: err
+  Tocke: 0

@@ -1,0 +1,13 @@
+Izvajanje testM-C-3
+  Log datoteka: testM-C-3.log
+  Izhod programa: testM-C-3.out
+  Ukazna vrstica: java Naloga2 mat st 4
+  Izhodni status: 0
+  Realni cas izvajanja: 197
+  Uporabniski cas izvajanja: 190
+  Sistemski cas izvajanja: 41
+  Procesorski cas izvajanja: 231
+Preverjanje testM-C-3
+  Izhodni status: ok
+  Standardni izhod: ok
+  Tocke: 1

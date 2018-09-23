@@ -1,0 +1,13 @@
+Izvajanje g-BT4
+  Log datoteka: g-BT4.log
+  Izhod programa: g-BT4.out
+  Ukazna vrstica: java Naloga3 bt
+  Izhodni status: 0
+  Realni cas izvajanja: 222
+  Uporabniski cas izvajanja: 239
+  Sistemski cas izvajanja: 40
+  Procesorski cas izvajanja: 279
+Preverjanje g-BT4
+  Izhodni status: ok
+  Standardni izhod: err
+  Tocke: 0

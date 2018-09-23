@@ -1,0 +1,5 @@
+Exception in thread "main" java.lang.ClassCastException: [Ljava.lang.Object; cannot be cast to [Ljava.lang.Integer;
+	at Node.getNeighborIds(Naloga3.java:866)
+	at Graph.colour_2c_aux(Naloga3.java:237)
+	at Graph.colour_2c(Naloga3.java:179)
+	at Naloga3.main(Naloga3.java:85)

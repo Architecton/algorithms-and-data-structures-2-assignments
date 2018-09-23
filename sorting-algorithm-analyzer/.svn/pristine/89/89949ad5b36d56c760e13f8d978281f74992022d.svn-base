@@ -1,0 +1,13 @@
+Izvajanje test-B-10
+  Log datoteka: test-B-10.log
+  Izhod programa: test-B-10.out
+  Ukazna vrstica: java Naloga1 trace ms down 100
+  Izhodni status: 0
+  Realni cas izvajanja: 300
+  Uporabniski cas izvajanja: 325
+  Sistemski cas izvajanja: 70
+  Procesorski cas izvajanja: 395
+Preverjanje test-B-10
+  Izhodni status: ok
+  Standardni izhod: ok
+  Tocke: 1

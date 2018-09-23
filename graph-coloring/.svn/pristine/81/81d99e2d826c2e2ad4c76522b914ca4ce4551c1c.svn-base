@@ -1,0 +1,12 @@
+Izvajanje g-EX1
+  Log datoteka: g-EX1.log
+  Izhod programa: g-EX1.out
+  Ukazna vrstica: java Naloga3 ex -n 500
+  Izhodni status: 137
+  Realni cas izvajanja: 1082
+  Uporabniski cas izvajanja: 1605
+  Sistemski cas izvajanja: 401
+  Procesorski cas izvajanja: 2006
+Preverjanje g-EX1
+  Izhodni status: err
+  Tocke: 0

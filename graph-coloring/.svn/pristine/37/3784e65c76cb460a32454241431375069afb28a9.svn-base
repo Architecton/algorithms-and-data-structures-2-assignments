@@ -1,0 +1,13 @@
+Izvajanje g-2C3
+  Log datoteka: g-2C3.log
+  Izhod programa: g-2C3.out
+  Ukazna vrstica: java Naloga3 2c
+  Izhodni status: 0
+  Realni cas izvajanja: 223
+  Uporabniski cas izvajanja: 233
+  Sistemski cas izvajanja: 49
+  Procesorski cas izvajanja: 282
+Preverjanje g-2C3
+  Izhodni status: ok
+  Standardni izhod: err
+  Tocke: 0

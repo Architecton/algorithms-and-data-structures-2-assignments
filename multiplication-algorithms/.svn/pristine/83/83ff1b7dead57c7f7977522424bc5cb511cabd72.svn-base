@@ -1,0 +1,13 @@
+Izvajanje testN-C-3
+  Log datoteka: testN-C-3.log
+  Izhod programa: testN-C-3.out
+  Ukazna vrstica: java Naloga2 num ka
+  Izhodni status: 0
+  Realni cas izvajanja: 157
+  Uporabniski cas izvajanja: 152
+  Sistemski cas izvajanja: 28
+  Procesorski cas izvajanja: 180
+Preverjanje testN-C-3
+  Izhodni status: ok
+  Standardni izhod: err
+  Tocke: 0

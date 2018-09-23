@@ -1,0 +1,13 @@
+Izvajanje testN-C-5
+  Log datoteka: testN-C-5.log
+  Izhod programa: testN-C-5.out
+  Ukazna vrstica: java Naloga2 num ka
+  Izhodni status: 0
+  Realni cas izvajanja: 561
+  Uporabniski cas izvajanja: 794
+  Sistemski cas izvajanja: 155
+  Procesorski cas izvajanja: 949
+Preverjanje testN-C-5
+  Izhodni status: ok
+  Standardni izhod: err
+  Tocke: 0

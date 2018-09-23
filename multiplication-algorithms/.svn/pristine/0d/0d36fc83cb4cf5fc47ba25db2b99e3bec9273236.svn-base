@@ -1,0 +1,12 @@
+Izvajanje testM-B-5
+  Log datoteka: testM-B-5.log
+  Izhod programa: testM-B-5.out
+  Ukazna vrstica: java Naloga2 mat dv 8
+  Izhodni status: 1
+  Realni cas izvajanja: 148
+  Uporabniski cas izvajanja: 117
+  Sistemski cas izvajanja: 39
+  Procesorski cas izvajanja: 156
+Preverjanje testM-B-5
+  Izhodni status: err
+  Tocke: 0

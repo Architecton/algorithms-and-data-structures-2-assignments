@@ -1,0 +1,13 @@
+Izvajanje test-C-6
+  Log datoteka: test-C-6.log
+  Izhod programa: test-C-6.out
+  Ukazna vrstica: java Naloga1 count ms up
+  Izhodni status: 0
+  Realni cas izvajanja: 640
+  Uporabniski cas izvajanja: 995
+  Sistemski cas izvajanja: 60
+  Procesorski cas izvajanja: 1055
+Preverjanje test-C-6
+  Izhodni status: ok
+  Standardni izhod: err
+  Tocke: 0

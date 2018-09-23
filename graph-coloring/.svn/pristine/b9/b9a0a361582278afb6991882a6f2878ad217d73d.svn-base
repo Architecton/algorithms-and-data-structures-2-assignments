@@ -1,0 +1,16 @@
+Naloga3.java:237: error: incompatible types: Object cannot be converted to Integer
+				for(Integer neighborId : next.getNeighborIds()) {
+				                                            ^
+Naloga3.java:360: error: incompatible types: Object cannot be converted to Integer
+		for(Integer neighborId : node.getNeighborIds()) {
+		                                            ^
+Naloga3.java:754: error: incompatible types: Object cannot be converted to Integer
+			for(Integer neighborID : this.nodes[nodeIndex].getNeighborIds()) {
+			                                                             ^
+Naloga3.java:775: error: incompatible types: Object cannot be converted to Integer
+			for(Integer neighborId: n.getNeighborIds()) {
+			                                        ^
+Naloga3.java:788: error: incompatible types: Object cannot be converted to Integer
+		for(Integer neighborId : node.getNeighborIds()) {
+		                                            ^
+5 errors

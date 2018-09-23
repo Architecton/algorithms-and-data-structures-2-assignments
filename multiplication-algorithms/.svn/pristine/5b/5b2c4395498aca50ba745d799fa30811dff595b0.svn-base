@@ -1,0 +1,13 @@
+Izvajanje testM-A-4
+  Log datoteka: testM-A-4.log
+  Izhod programa: testM-A-4.out
+  Ukazna vrstica: java Naloga2 mat os
+  Izhodni status: 0
+  Realni cas izvajanja: 250
+  Uporabniski cas izvajanja: 257
+  Sistemski cas izvajanja: 43
+  Procesorski cas izvajanja: 300
+Preverjanje testM-A-4
+  Izhodni status: ok
+  Standardni izhod: ok
+  Tocke: 1

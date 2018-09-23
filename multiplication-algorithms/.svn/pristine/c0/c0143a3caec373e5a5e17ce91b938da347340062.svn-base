@@ -1,0 +1,10 @@
+Naloga2.java:166: error: unclosed character literal
+				tempResString = '0 ' + tempResString;
+				                ^
+Naloga2.java:166: error: unclosed character literal
+				tempResString = '0 ' + tempResString;
+				                   ^
+Naloga2.java:166: error: not a statement
+				tempResString = '0 ' + tempResString;
+				                     ^
+3 errors

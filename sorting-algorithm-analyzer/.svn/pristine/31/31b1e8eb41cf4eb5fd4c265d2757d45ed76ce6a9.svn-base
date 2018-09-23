@@ -1,0 +1,13 @@
+Izvajanje test-A-3
+  Log datoteka: test-A-3.log
+  Izhod programa: test-A-3.out
+  Ukazna vrstica: java Naloga1 trace is up 14
+  Izhodni status: 0
+  Realni cas izvajanja: 209
+  Uporabniski cas izvajanja: 204
+  Sistemski cas izvajanja: 40
+  Procesorski cas izvajanja: 244
+Preverjanje test-A-3
+  Izhodni status: ok
+  Standardni izhod: ok
+  Tocke: 1

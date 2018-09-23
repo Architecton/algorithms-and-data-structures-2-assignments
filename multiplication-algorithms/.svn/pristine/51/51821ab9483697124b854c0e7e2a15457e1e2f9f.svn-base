@@ -1,0 +1,101 @@
+Naloga2.java:11: error: cannot find symbol
+				Vnumber fst = new Vnumber(sc);
+				^
+  symbol:   class Vnumber
+  location: class Naloga2
+Naloga2.java:11: error: cannot find symbol
+				Vnumber fst = new Vnumber(sc);
+				                  ^
+  symbol:   class Vnumber
+  location: class Naloga2
+Naloga2.java:12: error: cannot find symbol
+				Vnumber snd = new Vnumber(sc);
+				^
+  symbol:   class Vnumber
+  location: class Naloga2
+Naloga2.java:12: error: cannot find symbol
+				Vnumber snd = new Vnumber(sc);
+				                  ^
+  symbol:   class Vnumber
+  location: class Naloga2
+Naloga2.java:13: error: cannot find symbol
+				Vnumber result = fst.schoolMultiply(snd, true);
+				^
+  symbol:   class Vnumber
+  location: class Naloga2
+Naloga2.java:21: error: cannot find symbol
+				Vnumber fst = new Vnumber(sc);
+				^
+  symbol:   class Vnumber
+  location: class Naloga2
+Naloga2.java:21: error: cannot find symbol
+				Vnumber fst = new Vnumber(sc);
+				                  ^
+  symbol:   class Vnumber
+  location: class Naloga2
+Naloga2.java:22: error: cannot find symbol
+				Vnumber snd = new Vnumber(sc);
+				^
+  symbol:   class Vnumber
+  location: class Naloga2
+Naloga2.java:22: error: cannot find symbol
+				Vnumber snd = new Vnumber(sc);
+				                  ^
+  symbol:   class Vnumber
+  location: class Naloga2
+Naloga2.java:26: error: cannot find symbol
+				Vnumber fst = new Vnumber(sc);
+				^
+  symbol:   class Vnumber
+  location: class Naloga2
+Naloga2.java:26: error: cannot find symbol
+				Vnumber fst = new Vnumber(sc);
+				                  ^
+  symbol:   class Vnumber
+  location: class Naloga2
+Naloga2.java:27: error: cannot find symbol
+				Vnumber snd = new Vnumber(sc);
+				^
+  symbol:   class Vnumber
+  location: class Naloga2
+Naloga2.java:27: error: cannot find symbol
+				Vnumber snd = new Vnumber(sc);
+				                  ^
+  symbol:   class Vnumber
+  location: class Naloga2
+Naloga2.java:36: error: cannot find symbol
+			Matrix mat1 = new Matrix(sc);
+			^
+  symbol:   class Matrix
+  location: class Naloga2
+Naloga2.java:36: error: cannot find symbol
+			Matrix mat1 = new Matrix(sc);
+			                  ^
+  symbol:   class Matrix
+  location: class Naloga2
+Naloga2.java:37: error: cannot find symbol
+			Matrix mat2 = new Matrix(sc);
+			^
+  symbol:   class Matrix
+  location: class Naloga2
+Naloga2.java:37: error: cannot find symbol
+			Matrix mat2 = new Matrix(sc);
+			                  ^
+  symbol:   class Matrix
+  location: class Naloga2
+Naloga2.java:49: error: cannot find symbol
+				Matrix res = mat1.multiplyByDefinition(mat2);
+				^
+  symbol:   class Matrix
+  location: class Naloga2
+Naloga2.java:53: error: cannot find symbol
+				Matrix res = mat1.multiply_NDC(mat2, finishRecSize);
+				^
+  symbol:   class Matrix
+  location: class Naloga2
+Naloga2.java:57: error: cannot find symbol
+				Matrix res2 = mat1.strassenMultipy(mat2, finishRecSize);
+				^
+  symbol:   class Matrix
+  location: class Naloga2
+20 errors

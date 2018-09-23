@@ -1,0 +1,12 @@
+Izvajanje g-GR1
+  Log datoteka: g-GR1.log
+  Izhod programa: g-GR1.out
+  Ukazna vrstica: java Naloga3 gr
+  Izhodni status: 1
+  Realni cas izvajanja: 204
+  Uporabniski cas izvajanja: 187
+  Sistemski cas izvajanja: 46
+  Procesorski cas izvajanja: 233
+Preverjanje g-GR1
+  Izhodni status: err
+  Tocke: 0

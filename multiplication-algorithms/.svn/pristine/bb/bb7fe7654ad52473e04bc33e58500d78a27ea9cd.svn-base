@@ -1,0 +1,36 @@
+Naloga2.java:36: error: cannot find symbol
+			Matrix mat1 = new Matrix(sc);
+			^
+  symbol:   class Matrix
+  location: class Naloga2
+Naloga2.java:36: error: cannot find symbol
+			Matrix mat1 = new Matrix(sc);
+			                  ^
+  symbol:   class Matrix
+  location: class Naloga2
+Naloga2.java:37: error: cannot find symbol
+			Matrix mat2 = new Matrix(sc);
+			^
+  symbol:   class Matrix
+  location: class Naloga2
+Naloga2.java:37: error: cannot find symbol
+			Matrix mat2 = new Matrix(sc);
+			                  ^
+  symbol:   class Matrix
+  location: class Naloga2
+Naloga2.java:49: error: cannot find symbol
+				Matrix res = mat1.multiplyByDefinition(mat2);
+				^
+  symbol:   class Matrix
+  location: class Naloga2
+Naloga2.java:53: error: cannot find symbol
+				Matrix res = mat1.multiply_NDC(mat2, finishRecSize);
+				^
+  symbol:   class Matrix
+  location: class Naloga2
+Naloga2.java:57: error: cannot find symbol
+				Matrix res2 = mat1.strassenMultipy(mat2, finishRecSize);
+				^
+  symbol:   class Matrix
+  location: class Naloga2
+7 errors

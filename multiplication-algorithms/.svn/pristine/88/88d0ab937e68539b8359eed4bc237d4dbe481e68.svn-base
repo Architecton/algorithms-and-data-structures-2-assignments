@@ -1,0 +1,13 @@
+Izvajanje testN-A-4
+  Log datoteka: testN-A-4.log
+  Izhod programa: testN-A-4.out
+  Ukazna vrstica: java Naloga2 num os
+  Izhodni status: 0
+  Realni cas izvajanja: 374
+  Uporabniski cas izvajanja: 392
+  Sistemski cas izvajanja: 85
+  Procesorski cas izvajanja: 477
+Preverjanje testN-A-4
+  Izhodni status: ok
+  Standardni izhod: err
+  Tocke: 0

@@ -1,0 +1,13 @@
+Izvajanje test-C-4
+  Log datoteka: test-C-4.log
+  Izhod programa: test-C-4.out
+  Ukazna vrstica: java Naloga1 count hs up
+  Izhodni status: 0
+  Realni cas izvajanja: 610
+  Uporabniski cas izvajanja: 1000
+  Sistemski cas izvajanja: 57
+  Procesorski cas izvajanja: 1057
+Preverjanje test-C-4
+  Izhodni status: ok
+  Standardni izhod: ok
+  Tocke: 1

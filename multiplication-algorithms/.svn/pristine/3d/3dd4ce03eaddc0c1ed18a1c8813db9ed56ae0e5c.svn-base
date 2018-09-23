@@ -1,0 +1,13 @@
+Izvajanje testM-C-5
+  Log datoteka: testM-C-5.log
+  Izhod programa: testM-C-5.out
+  Ukazna vrstica: java Naloga2 mat st 8
+  Izhodni status: 0
+  Realni cas izvajanja: 640
+  Uporabniski cas izvajanja: 793
+  Sistemski cas izvajanja: 150
+  Procesorski cas izvajanja: 943
+Preverjanje testM-C-5
+  Izhodni status: ok
+  Standardni izhod: err
+  Tocke: 0

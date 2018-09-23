@@ -1,0 +1,13 @@
+Izvajanje test-C-3
+  Log datoteka: test-C-3.log
+  Izhod programa: test-C-3.out
+  Ukazna vrstica: java Naloga1 count is up
+  Izhodni status: 0
+  Realni cas izvajanja: 3874
+  Uporabniski cas izvajanja: 4321
+  Sistemski cas izvajanja: 84
+  Procesorski cas izvajanja: 4405
+Preverjanje test-C-3
+  Izhodni status: ok
+  Standardni izhod: ok
+  Tocke: 1

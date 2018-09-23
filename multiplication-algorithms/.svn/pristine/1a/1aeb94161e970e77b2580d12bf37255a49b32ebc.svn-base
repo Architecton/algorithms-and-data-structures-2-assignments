@@ -1,0 +1,12 @@
+Izvajanje testN-B-4
+  Log datoteka: testN-B-4.log
+  Izhod programa: testN-B-4.out
+  Ukazna vrstica: java Naloga2 num dv
+  Izhodni status: 1
+  Realni cas izvajanja: 139
+  Uporabniski cas izvajanja: 120
+  Sistemski cas izvajanja: 36
+  Procesorski cas izvajanja: 156
+Preverjanje testN-B-4
+  Izhodni status: err
+  Tocke: 0

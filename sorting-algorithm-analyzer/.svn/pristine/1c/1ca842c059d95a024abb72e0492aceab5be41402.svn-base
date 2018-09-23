@@ -1,0 +1,13 @@
+Izvajanje test-C-1
+  Log datoteka: test-C-1.log
+  Izhod programa: test-C-1.out
+  Ukazna vrstica: java Naloga1 count bs up
+  Izhodni status: 0
+  Realni cas izvajanja: 9032
+  Uporabniski cas izvajanja: 9409
+  Sistemski cas izvajanja: 69
+  Procesorski cas izvajanja: 9478
+Preverjanje test-C-1
+  Izhodni status: ok
+  Standardni izhod: ok
+  Tocke: 1

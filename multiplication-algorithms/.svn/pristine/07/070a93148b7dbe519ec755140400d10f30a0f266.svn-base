@@ -1,0 +1,13 @@
+Izvajanje testN-B-5
+  Log datoteka: testN-B-5.log
+  Izhod programa: testN-B-5.out
+  Ukazna vrstica: java Naloga2 num dv
+  Izhodni status: 0
+  Realni cas izvajanja: 1893
+  Uporabniski cas izvajanja: 2642
+  Sistemski cas izvajanja: 749
+  Procesorski cas izvajanja: 3391
+Preverjanje testN-B-5
+  Izhodni status: ok
+  Standardni izhod: ok
+  Tocke: 1

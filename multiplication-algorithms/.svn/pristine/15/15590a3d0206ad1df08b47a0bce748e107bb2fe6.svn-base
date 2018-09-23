@@ -1,0 +1,13 @@
+Izvajanje testN-A-3
+  Log datoteka: testN-A-3.log
+  Izhod programa: testN-A-3.out
+  Ukazna vrstica: java Naloga2 num os
+  Izhodni status: 0
+  Realni cas izvajanja: 174
+  Uporabniski cas izvajanja: 171
+  Sistemski cas izvajanja: 35
+  Procesorski cas izvajanja: 206
+Preverjanje testN-A-3
+  Izhodni status: ok
+  Standardni izhod: err
+  Tocke: 0

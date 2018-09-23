@@ -1,0 +1,13 @@
+Izvajanje test-B-8
+  Log datoteka: test-B-8.log
+  Izhod programa: test-B-8.out
+  Ukazna vrstica: java Naloga1 trace qs down 100
+  Izhodni status: 0
+  Realni cas izvajanja: 278
+  Uporabniski cas izvajanja: 310
+  Sistemski cas izvajanja: 50
+  Procesorski cas izvajanja: 360
+Preverjanje test-B-8
+  Izhodni status: ok
+  Standardni izhod: err
+  Tocke: 0

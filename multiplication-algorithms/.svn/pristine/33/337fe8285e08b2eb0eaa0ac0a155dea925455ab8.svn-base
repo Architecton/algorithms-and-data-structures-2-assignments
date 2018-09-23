@@ -1,0 +1,34 @@
+package Naloga2;
+
+import java.util.Scanner;
+
+public class Naloga2 {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		if(args[0].equals("mat")) {
+			// parsing the matrices (Parsing happens inside constructor)
+			Matrix mat1 = new Matrix(sc);
+			Matrix mat2 = new Matrix(sc);
+			
+			// Set default size of matrix when recursion stops
+			int finishRecSize = 1;
+			
+			if(args.length == 3) {
+				finishRecSize = Integer.parseInt(args[2]);
+			}
+			
+			if(args[1].equals("dv")) {
+				Matrix res = mat1.multiply_NDC(mat2, finishRecSize);
+				System.out.print(res.toString());
+			} else if(args[1].equals("st")) {
+				Matrix res2 = mat1.strassenMultipy(mat2, finishRecSize);
+				System.out.print(res2.toString());
+			}
+		}
+		
+		sc.close();
+	}
+
+}

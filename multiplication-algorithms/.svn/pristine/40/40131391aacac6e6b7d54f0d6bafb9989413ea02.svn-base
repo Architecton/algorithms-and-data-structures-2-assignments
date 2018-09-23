@@ -1,0 +1,946 @@
+import java.util.Scanner;
+public class Naloga2 {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		// integer multiplication
+		if(args[0].equals("num")) {
+			// "Grade School" multiplication
+			if(args[1].equals("os")) {
+				Vnumber fst = new Vnumber(sc);
+				System.out.println("FIRST INPUT: " + fst.toString());
+				Vnumber snd = new Vnumber(sc);
+				System.out.println("SECOND INPUT: " + snd.toString());
+				Vnumber result = fst.schoolMultiply(snd, true);
+				String res = result.toString();
+				for(int i = 0; i < res.length(); i++) {
+					System.out.printf((i == res.length() - 1) ? "%s\n" : "%s", "-");
+				}
+				System.out.println(res);
+			// Naive Divide and Conquer multiplication
+			} else if(args[1].equals("dv")) {
+				Vnumber fst = new Vnumber(sc);
+				Vnumber snd = new Vnumber(sc);
+				System.out.println(fst.multiply_NDC(snd).toString());
+			// Karatsuba algorithm for multiplication
+			} else if(args[1].equals("ka")) {
+				Vnumber fst = new Vnumber(sc);
+				Vnumber snd = new Vnumber(sc);
+				System.out.println(fst.multiplyKaratsuba(snd).toString());
+			}
+			
+		}
+		
+		// matrix multiplication
+		if(args[0].equals("mat")) {
+			// parsing the matrices (Parsing happens inside constructor)
+			Matrix mat1 = new Matrix(sc);
+			Matrix mat2 = new Matrix(sc);
+			
+			// Set default size of matrix when recursion stops.
+			int finishRecSize = 1;
+			
+			// if recursion exit size is specified in the arguments
+			if(args.length == 3) { 
+				finishRecSize = Integer.parseInt(args[2]);
+			}
+			
+			// multiplication by definition
+			if(args[1].equals("os")) {
+				Matrix res = mat1.multiplyByDefinition(mat2);
+				System.out.print(res.toString());
+			// naive divide and conquer multiplication
+			} else if(args[1].equals("dv")) {
+				Matrix res = mat1.multiply_NDC(mat2, finishRecSize);
+				System.out.print(res.toString());
+			// strassen algorithm for matrix multiplication
+			} else if(args[1].equals("st")) {
+				Matrix res2 = mat1.strassenMultipy(mat2, finishRecSize);
+				System.out.print(res2.toString());
+			}
+		}
+		
+		sc.close();
+	}
+}
+
+// Vnumber: represents an integer of an arbitrary size
+class Vnumber {
+	// attributes ///////////////////
+	public byte[] digitArray;
+	private boolean isZero;
+	/////////////////////////////////
+	
+	
+	// 1. constructor - the number is parsed with a passed Scanner instance
+	public Vnumber(Scanner sc) {
+		String num = sc.nextLine();
+		this.isZero = true;
+		char[] temp = num.toCharArray();
+		this.digitArray = new byte[temp.length];
+		for(int i = 0; i < temp.length; i++) {
+			this.digitArray[i] = Byte.parseByte(Character.toString(temp[i]));
+			if(this.digitArray[i] == 0) {
+				this.isZero = false;
+			}
+		}
+	}
+	
+	// 2. constructor - make a front padded version of a passed Vnumber instance
+	public Vnumber(Vnumber num, int newLength) {
+		byte[] paddedDigitArr = new byte[newLength];
+		for(int i = paddedDigitArr.length - num.digitArray.length; i < paddedDigitArr.length; i++) {
+			paddedDigitArr[i] = num.digitArray[i - (paddedDigitArr.length - num.digitArray.length)];
+		}
+		this.digitArray = paddedDigitArr;
+	}
+	
+	// 3. constructor: intialize Vnumber with a Java int value
+	public Vnumber(int initVal) {
+		if(initVal == 0) {
+			this.isZero = true;
+			this.digitArray = new byte[1];
+			this.digitArray[0] = 0;
+			return;
+		} else {
+			this.isZero = false;
+		}
+		int len = 0;
+		int lenTest = initVal;
+		// get digit array length
+		while(lenTest != 0) {
+			lenTest /= 10;
+			len++;
+		}
+		// initialize and fill digit array
+		this.digitArray = new byte[len];
+		int indexArr = this.digitArray.length - 1;
+		while(initVal != 0) {
+			this.digitArray[indexArr] = (byte)(initVal % 10);
+			initVal /= 10;
+			indexArr--;
+		}
+	}
+	
+	// 4. constructor: intialize Vnumber with a given Byte array
+	public Vnumber(byte[] initArray) {
+		this.digitArray = initArray;
+		this.isZero = true;
+		for(int i = 0; i < initArray.length; i++) {
+			if(initArray[i] > 0) {
+				this.isZero = false;
+			}
+		}
+	}
+	
+	// 5. constructor: initialize Vnumber instance from String representation of a number
+	public Vnumber(String num) {
+		char[] numTemp = num.toCharArray();
+		this.digitArray = new byte[numTemp.length];
+		this.isZero = true;
+		for(int i = 0; i < numTemp.length; i++) {
+			this.digitArray[i] = (byte)Character.getNumericValue(numTemp[i]);
+			if(this.digitArray[i] > 0) {
+				this.isZero = false;
+			}
+		}
+	}
+	
+	// isZero: Check if this number is equal to zero or not.
+	public boolean isZero() {
+		return this.isZero;
+	}
+	
+	// schoolMultiply: Multiply this number with the number num using the "Grade School" algorithm
+	public Vnumber schoolMultiply(Vnumber num, boolean trace) {
+		// Extract and save number arrays.
+		byte[] num1 = this.digitArray;
+		byte[] num2 = num.digitArray;
+		
+		String tempResString = "";
+		// Evaluate expression num1*sum2
+		// Go over digits in num2 and multiply by digits in num1
+		for(int i = 0; i < num2.length; i++) {
+			// Go over number 2
+			byte digit2 = num2[i];
+			// initial carry is 0
+			byte carry = 0;
+			for(int j = num1.length - 1; j >= 0; j--) {
+				byte digit1 = num1[j];
+				// Product is at most 81 (+ possible carry) and can be stored in a Byte type.
+				byte resNum = (byte)(digit2*digit1 + carry);
+				byte resDigit = (byte)(resNum % 10);
+				carry = (byte)(resNum / 10);
+				tempResString = resDigit + tempResString;
+			}
+			// if exists final carry
+			if(carry > 0) {
+				tempResString = carry + tempResString;
+			}
+			if(i < num2.length - 1) {
+				tempResString = ' ' + tempResString;
+			}
+		}
+		System.out.println(tempResString);
+		// Sum partial result into final number.
+		Vnumber result = addSubresults_aux(tempResString, trace);
+		
+		return result;
+	}
+	
+	// Vnumber addSubresults_aux: Add partial results into grand total result
+	private Vnumber addSubresults_aux(String tempResString, boolean trace) {
+		String res = "";
+		String[] tempResults = tempResString.split(" ");
+		for(int i = tempResults.length - 1; i >= 0; i--) {
+			String nextNum = tempResults[i];
+			if(trace){System.out.println((nextNum.charAt(0) == '0') ? '0' : nextNum);}
+			res = add_aux(res + '0', nextNum);
+		}
+		return new Vnumber(res);
+	}
+	
+	// add_aux: auxiliary function for adding the partial results in grade school multiplication algorithm
+	public static String add_aux(String num1, String num2) {
+		char[] larger = (num1.length() > num2.length()) ? num1.toCharArray() : num2.toCharArray();
+		char[] smaller = (num1.length() <= num2.length()) ? num1.toCharArray() : num2.toCharArray();
+		byte[] res = new byte[larger.length];
+		for(int i = 0; i < larger.length; i++) {
+			if(i >= larger.length - smaller.length) {
+				res[i] = (byte)(Character.getNumericValue(larger[i]) + Character.getNumericValue(smaller[i - (larger.length - smaller.length)]));
+			} else {
+				res[i] = (byte)Character.getNumericValue(larger[i]);
+			}
+		}
+
+		String resString = normaliseVnumStr(res);
+		return resString;
+	}
+	
+	// add: Add two instances of Vnumber and return result
+	public static Vnumber add(Vnumber num1, Vnumber num2) {
+		if(num1 == null || num2 == null) {
+			return null;
+		}
+		byte[] larger = (num1.digitArray.length > num2.digitArray.length) ? num1.digitArray.clone() : num2.digitArray.clone();
+		byte[] smaller = (num1.digitArray.length <= num2.digitArray.length) ? num1.digitArray.clone() : num2.digitArray.clone();
+		byte[] res = new byte[larger.length];
+		for(int i = 0; i < larger.length; i++) {
+			if(i >= larger.length - smaller.length) {
+				res[i] = (byte)(larger[i] + smaller[i - (larger.length - smaller.length)]);
+			} else {
+				res[i] = larger[i];
+			}
+		}
+		
+		Vnumber resNum = normaliseVnum(res);
+		return resNum;
+	}
+	
+	// normalisevNumStr: auxilliary function for applying carry to add_aux function subresults
+	private static String normaliseVnumStr(byte[] num) {
+		String strResult = "";
+		for(int i = num.length - 1; i >= 0; i--) {
+			byte resDigit = (byte)(num[i] % 10);
+			byte carry = (byte)(num[i] / 10);
+			if(i > 0) {
+				num[i] = resDigit;
+				num[i - 1] += (byte)carry;
+			} else {
+				num[i] = resDigit;
+				strResult = makeString_aux(num);
+				if(carry > 0) {	
+					strResult = carry + strResult;
+				}
+			}
+		}
+		return strResult;
+	}
+	
+	// normalisevNum: auxilliary function for applying carry to add function subresults
+	private static Vnumber normaliseVnum(byte[] num) {
+		Vnumber res = null;
+		for(int i = num.length - 1; i >= 0; i--) {
+			byte resDigit = (byte)(num[i] % 10);
+			byte carry = (byte)(num[i] / 10);
+			if(i > 0) {
+				num[i] = resDigit;
+				num[i - 1] += (byte)carry;
+			} else {
+				num[i] = resDigit;
+				res = new Vnumber(num);
+				if(carry > 0) {
+					byte[] numCorr = new byte[num.length + 1];
+					System.arraycopy(num, 0, numCorr, 1, num.length);
+					numCorr[0] = carry;
+					res = new Vnumber(numCorr);
+				}
+			}
+		}
+		return res;
+	}
+	
+	// makeString_aux: auxiliary function for making a String representation of number represented by digits in arr
+	private static String makeString_aux(byte[] arr) {
+		String res = "";
+		for(int i = 0; i < arr.length; i++) {
+			res += arr[i];
+		}
+		return res;
+	}
+	
+	// multiply_NDC: Multiply this number with the number num using the Naive Divide and Conquer Algorithm
+	public Vnumber multiply_NDC(Vnumber num) {
+		
+		// TODO
+		// Extend both number to nearest common even length
+		int newLength = max(this.digitArray.length, num.digitArray.length);
+		while(!isEven(newLength)) {
+			newLength++;
+		}
+		
+		// extend numbers
+		Vnumber extNum1 = new Vnumber(this, newLength);
+		Vnumber extNum2 = new Vnumber(num, newLength);
+		
+		// call to algorithm implementation
+		Vnumber res = NDC(extNum1, extNum2);
+		
+		return res;
+	}
+	
+	// NDC: The Naive Divide and Conquer algorithm implementation method
+	private Vnumber NDC(Vnumber num1, Vnumber num2) {
+		// base cases
+		// if num1 == 0 or num2 == 0, return 0
+		if(num1.isZero || num2.isZero) {
+			return new Vnumber(0);
+		// if any number has only one digit, perform "Grade School" multiplication
+		} else if(num1.clearPadding().digitArray.length == 1 || num2.clearPadding().digitArray.length == 1) {
+			num1 = num1.clearPadding();
+			num2 = num2.clearPadding();
+			Vnumber res = num1.schoolMultiply(num2, false);
+			
+			return res;
+		}
+		
+		// get number of digits
+		int len = num1.digitArray.length;
+		
+		// compute and save number partitons a1, a0, b1, b0
+		byte[] passArray;
+		passArray = new byte[num1.digitArray.length / 2];
+		System.arraycopy(num1.digitArray, 0, passArray, 0, num1.digitArray.length / 2);
+		Vnumber a1 = new Vnumber(passArray);
+		
+		passArray = new byte[num1.digitArray.length / 2];
+		System.arraycopy(num1.digitArray, num1.digitArray.length / 2, passArray, 0, num1.digitArray.length / 2);
+		Vnumber a0 = new Vnumber(passArray);
+		
+		passArray = new byte[num2.digitArray.length / 2];
+		System.arraycopy(num2.digitArray, 0, passArray, 0, num2.digitArray.length / 2);
+		Vnumber b1 = new Vnumber(passArray);
+		
+		passArray = new byte[num2.digitArray.length / 2];
+		System.arraycopy(num2.digitArray, num2.digitArray.length / 2, passArray, 0, num2.digitArray.length / 2);
+		Vnumber b0 = new Vnumber(passArray);
+		
+		// Compute subproducts (recursive calls)
+		System.out.printf("%s %s%n", a0.toString(), b0.toString());
+		Vnumber a0b0 = NDC(a0, b0);
+		System.out.println(a0b0.toString());
+		
+		System.out.printf("%s %s%n", a0.toString(), b1.toString());
+		Vnumber a0b1 = NDC(a0, b1);
+		System.out.println(a0b1.toString());
+		
+		System.out.printf("%s %s%n", a1.toString(), b0.toString());
+		Vnumber a1b0 = NDC(a1, b0);
+		System.out.println(a1b0.toString());
+		
+		System.out.printf("%s %s%n", a1.toString(), b1.toString());
+		Vnumber a1b1 = NDC(a1, b1);
+		System.out.println(a1b1.toString());
+		
+		// get result
+		Vnumber res = add(add(appendZeros(a1b1, len), appendZeros(add(a0b1, a1b0), len/2)), a0b0);
+		
+		return res;
+	}
+	
+	// appendZeros: append trailing zeroes to number represented by num (multiply by 10^numZeros)
+	private static Vnumber appendZeros(Vnumber num, int numZeros) {
+		if(num == null) {
+			return null;
+		}
+		if(num.isZero) {
+			return new Vnumber(0);
+		}
+		byte[] newArr = new byte[num.digitArray.length + numZeros];
+		System.arraycopy(num.digitArray, 0, newArr, 0, num.digitArray.length);
+		
+		return new Vnumber(newArr);
+	}
+	
+	
+	// multiply_Karatsuba: Multiply this number with the number num using the Naive Divide and Conquer Algorithm
+	public Vnumber multiplyKaratsuba(Vnumber num) {
+		// Extend both number to nearest common even length (if applicable)
+		int newLength = max(this.digitArray.length, num.digitArray.length);
+		while(!isEven(newLength)) {
+			newLength++;
+		}
+		
+		// Extend numbers for algorithm implementation
+		Vnumber extNum1 = new Vnumber(this, newLength);
+		Vnumber extNum2 = new Vnumber(num, newLength);
+			
+		// call to algorithm implementation
+		Vnumber res = karatsuba(extNum1, extNum2);
+		return res;
+	}
+	
+	// karatsuba: implementation of the Karatsuba multiplication algorithm
+	// TODO - 1234 * 12 DEBUG
+	private Vnumber karatsuba(Vnumber num1, Vnumber num2) {
+		// base cases
+		// If num1 == 0 or num2 == 0, return 0.
+		if(num1.isZero || num2.isZero) {
+			return new Vnumber(0);
+		// if numbers have one digit
+		} else if(num1.clearPadding().digitArray.length == 1 || num2.clearPadding().digitArray.length == 1) {
+			// trivial multiplication
+			return num1.schoolMultiply(num2, false);
+		}
+		
+		// Get number of digits.
+		int len = num1.digitArray.length;
+		
+		// Compute and save partitions a1, a0, b1, b0.
+		byte[] passArray;
+		passArray = new byte[num1.digitArray.length / 2];
+		System.arraycopy(num1.digitArray, 0, passArray, 0, num1.digitArray.length / 2);
+		Vnumber a1 = new Vnumber(passArray);
+		
+		passArray = new byte[num1.digitArray.length / 2];
+		System.arraycopy(num1.digitArray, num1.digitArray.length / 2, passArray, 0, num1.digitArray.length / 2);
+		Vnumber a0 = new Vnumber(passArray);
+		
+		passArray = new byte[num2.digitArray.length / 2];
+		System.arraycopy(num2.digitArray, 0, passArray, 0, num2.digitArray.length / 2);
+		Vnumber b1 = new Vnumber(passArray);
+		
+		passArray = new byte[num2.digitArray.length / 2];
+		System.arraycopy(num2.digitArray, num2.digitArray.length / 2, passArray, 0, num2.digitArray.length / 2);
+		Vnumber b0 = new Vnumber(passArray);
+		
+		// Compute sub products (recursive calls).
+		System.out.printf("%s %s%n", a0.toString(), b0.toString());
+		Vnumber a0b0 = karatsuba(a0, b0);
+		System.out.printf("%s%n", a0b0.toString());
+		
+		System.out.printf("%s %s%n", a1.toString(), b1.toString());
+		Vnumber a1b1 = karatsuba(a1, b1);
+		System.out.printf("%s%n", a1b1.toString());
+		
+		// Compute some needed sums
+		Vnumber sum_a0a1 = add(a0, a1);
+		Vnumber sum_b0b1 = add(b0, b1);
+		
+		System.out.printf("%s %s%n", sum_a0a1.toString(), sum_b0b1.toString());
+		Vnumber prod_a0a1plusb0b1 = karatsuba(sum_a0a1, sum_b0b1);
+		System.out.printf("%s%n", prod_a0a1plusb0b1.toString());
+		
+		// Get result.
+		Vnumber res = add(add(appendZeros(a1b1, len), appendZeros(subtract(subtract(prod_a0a1plusb0b1, a1b1), a0b0), len/2)), a0b0);		
+		return res;
+	}
+	
+	// subtract: subtracts number represented by Vnumber num1 from number represented by num2
+	private Vnumber subtract(Vnumber num1, Vnumber num2) {
+		byte[] larger = num1.digitArray.clone();
+		byte[] smaller = num2.digitArray.clone();
+		byte[] res = new byte[larger.length];
+		for(int i = 0; i < larger.length; i++) {
+			if(i >= larger.length - smaller.length) {
+				res[i] = (byte)(larger[i] - smaller[i - (larger.length - smaller.length)]);
+			} else {
+				res[i] = larger[i];
+			}
+		}
+		// normalise result (apply borrow)
+		Vnumber resNum = normaliseVnumSub(res);
+		return resNum;
+	}
+	
+	// normalievNumSub: auxiliary method for applying borrow to subtraction results obtained by subtract method
+	private Vnumber normaliseVnumSub(byte[] num) {
+		for(int i = num.length - 1; i >= 0; i--) {
+			if(num[i] < 0 && i > 0) {
+				num[i] = (byte)(num[i] + 10);
+				num[i - 1]--;
+			}
+		}
+		return new Vnumber(num);
+	}
+	
+	// clearPadding: clear padding zeros from digitArray and return Vnumber with such digitArray.
+	public Vnumber clearPadding() {
+		int numDigits = 0;
+		for(int i = 0; i < this.digitArray.length; i++) {
+			if(this.digitArray[i] > 0) {
+				numDigits = this.digitArray.length - i;
+				break;
+			}
+		}
+		byte[] newDigitArr = new byte[numDigits];
+		System.arraycopy(this.digitArray, this.digitArray.length - numDigits, newDigitArr, 0, numDigits);
+		return new Vnumber(newDigitArr);
+	}
+	
+	// max: get max(a, b)
+	private int max(int a, int b) {
+		if(a > b) {
+			return a;
+		} else {
+			return b;
+		}
+	}
+	
+	// isEven: Check if integer num is even.
+	private boolean isEven(int num) {
+		return num % 2 == 0;
+	}
+	
+	// Return string representation of the number represented by this instance of Vnumber.
+	public String toString() {
+		String res = "";
+		int i = 0;
+		while(i < this.digitArray.length && this.digitArray[i] == 0) {
+			i++;
+		}
+		
+		if(i == this.digitArray.length) {
+			return "0";
+		}
+		
+		for(; i < digitArray.length; i++) {
+			res += String.valueOf(digitArray[i]);
+		}
+		return res;
+	}
+}
+
+// class representing the matrix
+class Matrix {
+	// attributes
+	private int[][] matrixArray;
+	private int y_dim;
+	private int x_dim;
+
+	// constructor for parsing the array from standard input
+	public Matrix(Scanner sc) {
+		this.y_dim = sc.nextInt();
+		this.x_dim = sc.nextInt();
+		
+		matrixArray = new int[y_dim][x_dim];
+		
+		for(int i = 0; i < y_dim; i++) {
+			for(int j = 0; j < x_dim; j++) {
+				matrixArray[i][j] = sc.nextInt();
+			}
+		}
+	}
+	
+	// constructor for initializing a "blank" matrix of zeros
+	public Matrix(int y_dim, int x_dim) {
+		this.y_dim = y_dim;
+		this.x_dim = x_dim;
+		this.matrixArray = new int[y_dim][x_dim];
+	}
+	
+	// multipliyByDefinition: Multiply the matrices using the definition of matrix multiplication
+	public Matrix multiplyByDefinition(Matrix mat) {
+		// compute result matrix dimensions
+		int y_dimension_res = this.y_dim;
+		int x_dimension_res = mat.x_dim;
+		
+		// initialize resulting matrix
+		Matrix res = new Matrix(y_dimension_res, x_dimension_res);
+		
+		// go over result rows
+		for(int x = 0; x < x_dimension_res; x++) {				
+			int el = 0;
+			// compute next element
+			for(int i = 0; i < this.y_dim; i++) {
+				for(int j = 0; j < this.x_dim; j++) {
+					el += this.matrixArray[i][j]*mat.matrixArray[j][x];
+				}
+				// add computed element to result matrix
+				res.matrixArray[i][x] = el;
+				el = 0;
+			}				 
+		}
+		
+		return res;
+	}
+	
+	// Multiply_NDC: multiply this matrix with Matrix mat using the naive divide and conquer approach.
+	public Matrix multiply_NDC(Matrix mat, int finishRecDim) {
+		
+		// Making sure both matrices are square of dimensions that are a power of two ////
+		
+		// Make sure both matrices are square and that the dimensions are a power of two
+		int new_dim_this = Math.max(this.y_dim, this.x_dim);
+		int new_dim_mat = Math.max(mat.x_dim, mat.y_dim);
+		int new_dim = Math.max(new_dim_this, new_dim_mat);
+		
+		while(!isPowerOfTwo(new_dim)) {
+			new_dim++;
+		}
+		
+		Matrix thisMatrixPadded = Matrix.makePaddedVersion(this, new_dim, new_dim);
+		Matrix matPadded = Matrix.makePaddedVersion(mat, new_dim, new_dim);
+		///////////////////////////////////////////////////////////////////////////////////
+		
+		// Call multiplication function.
+		Matrix res;
+		res = NDC(thisMatrixPadded, matPadded, finishRecDim);
+		
+		return res;
+	}
+	
+	// makePaddedVersion: enlarges matrix mat to dimensions y_dim x x_dim by padding it with zeros 
+	private static Matrix makePaddedVersion(Matrix mat, int y_dim, int x_dim) {
+		Matrix res = new Matrix(y_dim, x_dim);
+		for(int i = 0; i < mat.y_dim; i++) {
+			for(int j = 0; j < mat.x_dim; j++) {
+				res.matrixArray[i][j] = mat.matrixArray[i][j];
+			}
+		}
+		
+		return res;
+	}
+	
+	// NDC - the recursive Naive Divide and Conquer algorithm
+	private Matrix NDC(Matrix A, Matrix B, int finishRecDim) {
+		
+		// base case: matrices are of dimensions 1x1
+		if(A.y_dim == 1) {
+			Matrix res = new Matrix(1, 1);
+			res.matrixArray[0][0] = A.matrixArray[0][0] * B.matrixArray[0][0];
+			return res;
+		} else if(A.y_dim <= finishRecDim) {
+			// if reached max depth stop recurring and multiply by definition.
+			Matrix res = A.multiplyByDefinition(B);
+			return res;
+		}
+		
+		// Get submatrices.
+		Matrix A11 = extractSubmatrix(A, 11);
+		Matrix A12 = extractSubmatrix(A, 12);
+		Matrix A21 = extractSubmatrix(A, 21);
+		Matrix A22 = extractSubmatrix(A, 22);
+		Matrix B11 = extractSubmatrix(B, 11);
+		Matrix B12 = extractSubmatrix(B, 12);
+		Matrix B21 = extractSubmatrix(B, 21);
+		Matrix B22 = extractSubmatrix(B, 22);
+		
+		// Compute the subresults.
+		Matrix res_11_p1 = NDC(A11, B11, finishRecDim);
+		System.out.println(sumElements(res_11_p1));
+		Matrix res_11_p2 = NDC(A12, B21, finishRecDim);
+		System.out.println(sumElements(res_11_p2));
+		Matrix res11 = add(res_11_p1, res_11_p2);
+		
+		Matrix res_12_p1 = NDC(A11, B12, finishRecDim);
+		System.out.println(sumElements(res_12_p1));
+		Matrix res_12_p2 = NDC(A12, B22, finishRecDim);
+		System.out.println(sumElements(res_12_p2));
+		Matrix res12 = add(res_12_p1, res_12_p2);
+	
+		Matrix res_21_p1 = NDC(A21, B11, finishRecDim);
+		System.out.println(sumElements(res_21_p1));
+		Matrix res_21_p2 = NDC(A22, B21, finishRecDim);
+		System.out.println(sumElements(res_21_p2));
+		Matrix res21 = add(res_21_p1, res_21_p2);
+		
+		Matrix res_22_p1 = NDC(A21, B12, finishRecDim);
+		System.out.println(sumElements(res_22_p1));
+		Matrix res_22_p2 = NDC(A22, B22, finishRecDim);
+		System.out.println(sumElements(res_22_p2));
+		Matrix res22 = add(res_22_p1, res_22_p2);
+		
+		
+		// Concatenate the subresults into the final result.
+		Matrix res = catMatrix(res11, res12, res21, res22);
+		
+		return res;
+	}
+	
+	// add: Add matrices A and B
+	private Matrix add(Matrix A, Matrix B) {
+		
+		// Check if matrices' dimensions match.
+		if(A.x_dim != B.x_dim || A.y_dim != B.x_dim) {
+			throw new Error("add: dimension mismatch");
+		}
+		
+		// Add elements with same indices.
+		Matrix res = new Matrix(A.y_dim, A.x_dim);
+		for(int i = 0; i < A.y_dim; i++) {
+			for(int j = 0; j < B.x_dim; j++) {
+				res.matrixArray[i][j] = A.matrixArray[i][j] + B.matrixArray[i][j];
+			}
+		}
+		
+		return res;
+	}
+	
+	// subtract: Subtract matrices A and B
+	private Matrix subtract(Matrix A, Matrix B) {
+		
+		// Check if matrices' dimensions match.
+		if(A.x_dim != B.x_dim || A.y_dim != B.x_dim) {
+			throw new Error("add: dimension mismatch");
+		}
+		
+		// Add elements with same indices.
+		Matrix res = new Matrix(A.y_dim, A.x_dim);
+		for(int i = 0; i < A.y_dim; i++) {
+			for(int j = 0; j < B.x_dim; j++) {
+				res.matrixArray[i][j] = A.matrixArray[i][j] - B.matrixArray[i][j];
+			}
+		}
+		
+		return res;
+	}
+	
+	// extractSubmatrix: Extracts submatrix consisting of one quartet of the original matrix.
+	// The submatrix is specified by the index: [11 12; 21 22]
+	private Matrix extractSubmatrix(Matrix mat, int index) {
+		
+		// Check if matrix dimensions are a power of two
+		if(!isPowerOfTwo(mat.y_dim) || mat.x_dim != mat.y_dim) {
+			throw new Error("extractSubmatrix: passed matrix must be square with dimensions of a power of two");
+		}
+		
+		// Instantiate blank matrix for result.
+		Matrix res = new Matrix(mat.y_dim / 2, mat.x_dim / 2);
+		
+		// Extract submatrix specified by the index.
+		if(index == 11) {
+			
+			for(int i = 0; i < mat.y_dim / 2; i++) {
+				for(int j = 0; j < mat.x_dim / 2; j++) {
+					res.matrixArray[i][j] = mat.matrixArray[i][j];
+				}
+			}
+			
+		} else if(index == 12) {
+			
+			for(int i = 0; i < mat.y_dim / 2; i++) {
+				for(int j = mat.x_dim / 2; j < mat.x_dim; j++) {
+					res.matrixArray[i][j - mat.x_dim / 2] = mat.matrixArray[i][j];
+				}
+			}
+			
+		} else if(index == 21) {
+			
+			for(int i = mat.y_dim / 2; i < mat.y_dim; i++) {
+				for(int j = 0; j < mat.x_dim / 2; j++) {
+					res.matrixArray[i - mat.y_dim / 2][j] = mat.matrixArray[i][j];
+				}
+			}
+			
+		} else if(index == 22) {
+			
+			for(int i = mat.y_dim / 2; i < mat.y_dim; i++) {
+				for(int j = mat.x_dim / 2; j < mat.x_dim; j++) {
+					res.matrixArray[i - mat.y_dim / 2][j - mat.x_dim / 2] = mat.matrixArray[i][j];
+				}
+			}
+			
+		}
+		
+		return res;
+	}
+	
+	// catMatrix: Concatenates matrices A, B, C and D into a single square matrix as [A B; C D]
+	// A, B, C and D should be square matrices
+	private Matrix catMatrix(Matrix A, Matrix B, Matrix C, Matrix D) {
+		
+		// Make blank matrix for result.
+		int y_dim_res = A.y_dim * 2;
+		int x_dim_res = A.x_dim * 2;
+		Matrix res = new Matrix(y_dim_res, x_dim_res);
+		
+		// Copy submatrix elements into the resulting matrix
+		
+		// submatrix A
+		for(int i = 0; i < y_dim_res / 2; i++) {
+			for(int j = 0; j < x_dim_res / 2; j++) {
+				res.matrixArray[i][j] = A.matrixArray[i][j]; 
+			}
+		}
+		
+		// submatrix B
+		for(int i = 0; i < y_dim_res / 2; i++) {
+			for(int j = x_dim_res / 2; j < x_dim_res; j++) {
+				res.matrixArray[i][j] = B.matrixArray[i][j - x_dim_res / 2];
+			}
+		}
+		
+		// submatrix C
+		for(int i = y_dim_res / 2; i < y_dim_res; i++) {
+			for(int j = 0; j < x_dim_res / 2; j++) {
+				res.matrixArray[i][j] = C.matrixArray[i - y_dim_res / 2][j];
+			}
+		}
+		
+		// submatrix D
+		for(int i = y_dim_res / 2; i < y_dim_res; i++) {
+			for(int j = x_dim_res / 2; j < x_dim_res; j++) {
+				res.matrixArray[i][j] = D.matrixArray[i - y_dim_res / 2][j - x_dim_res / 2];
+			}
+		}
+		
+		return res;
+	}
+	
+	// isPowerOfTwo: Check if integer num is a power of two
+	private boolean isPowerOfTwo(int num) {
+		if(num > 0) {
+			return (num & (num - 1)) == 0;
+		} else {
+			return false;
+		}
+	}
+	
+	
+	// sumElements: sum the elements in the matrix mat
+	private int sumElements(Matrix mat) {
+		int sum = 0;
+		for(int i = 0; i < mat.y_dim; i++) {
+			for(int j = 0; j < mat.x_dim; j++) {
+				sum += mat.matrixArray[i][j];
+			}
+		}
+		return sum;
+	}
+	
+	// strassenMultiply: Multiply this matrix with matrix mat using the Strassen algorithem
+	public Matrix strassenMultipy(Matrix mat, int finishRecDim) {
+
+		// Make sure both matrices are square and that the dimensions are a power of two
+		int new_dim_this = Math.max(this.y_dim, this.x_dim);
+		int new_dim_mat = Math.max(mat.x_dim, mat.y_dim);
+		int new_dim = Math.max(new_dim_this, new_dim_mat);
+		
+		while(!isPowerOfTwo(new_dim)) {
+			new_dim++;
+		}
+		
+		Matrix thisMatrixPadded = Matrix.makePaddedVersion(this, new_dim, new_dim);
+		Matrix matPadded = Matrix.makePaddedVersion(mat, new_dim, new_dim);
+		///////////////////////////////////////////////////////////////////////////////////
+		
+		// Compute the product
+		Matrix res = strassen(thisMatrixPadded, matPadded, finishRecDim);
+		
+		return res;
+	}
+	
+	// strassen - the recursive Strassen matrix multiplication algorithm
+	private Matrix strassen(Matrix A, Matrix B, int finishRecDim) {
+		
+		if(A.y_dim <= finishRecDim) {
+			Matrix res = A.multiplyByDefinition(B);
+			return res;
+		}
+		
+		
+		// Get submatrices.
+		Matrix A11 = extractSubmatrix(A, 11);
+		Matrix A12 = extractSubmatrix(A, 12);
+		Matrix A21 = extractSubmatrix(A, 21);
+		Matrix A22 = extractSubmatrix(A, 22);
+		Matrix B11 = extractSubmatrix(B, 11);
+		Matrix B12 = extractSubmatrix(B, 12);
+		Matrix B21 = extractSubmatrix(B, 21);
+		Matrix B22 = extractSubmatrix(B, 22);
+		
+		// Base case
+		if(A11.y_dim == 1) {
+			int A11_val = A11.matrixArray[0][0];
+			int A12_val = A12.matrixArray[0][0];
+			int A21_val = A21.matrixArray[0][0];
+			int A22_val = A22.matrixArray[0][0];
+			int B11_val = B11.matrixArray[0][0];
+			int B12_val = B12.matrixArray[0][0];
+			int B21_val = B21.matrixArray[0][0];
+			int B22_val = B22.matrixArray[0][0];
+			
+			int p1 = A11_val*(B12_val - B22_val);
+			System.out.println(p1);
+			int p2 = (A11_val + A12_val)*B22_val;
+			System.out.println(p2);
+			int p3 = (A21_val + A22_val)*B11_val;
+			System.out.println(p3);
+			int p4 = A22_val*(B21_val - B11_val);
+			System.out.println(p4);
+			int p5 = (A11_val+ A22_val)*(B11_val + B22_val);
+			System.out.println(p5);
+			int p6 = (A12_val - A22_val)*(B21_val + B22_val);
+			System.out.println(p6);
+			int p7 = (A11_val - A21_val)*(B11_val + B12_val);
+			System.out.println(p7);
+			
+			Matrix res = new Matrix(2, 2);
+			res.matrixArray[0][0] = p5 + p4 - p2 + p6;
+			res.matrixArray[0][1] = p1 + p2;
+			res.matrixArray[1][0] = p3 + p4;
+			res.matrixArray[1][1] = p1 + p5 - p3 - p7;
+			
+			return res;
+		}
+		
+		Matrix P1 = strassen(A11, subtract(B12, B22), finishRecDim);
+		System.out.println(sumElements(P1));
+		Matrix P2 = strassen(add(A11, A12), B22, finishRecDim);
+		System.out.println(sumElements(P2));
+		Matrix P3 = strassen(add(A21, A22), B11, finishRecDim);
+		System.out.println(sumElements(P3));
+		Matrix P4 = strassen(A22, subtract(B21, B11), finishRecDim);
+		System.out.println(sumElements(P4));
+		Matrix P5 = strassen(add(A11, A22), add(B11, B22), finishRecDim);
+		System.out.println(sumElements(P5));
+		Matrix P6 = strassen(subtract(A12, A22), add(B21, B22), finishRecDim);
+		System.out.println(sumElements(P6));
+		Matrix P7 = strassen(subtract(A11, A21), add(B11, B12), finishRecDim);
+		System.out.println(sumElements(P7));
+		
+		Matrix res11 = add(subtract(add(P5, P4), P2), P6);
+		Matrix res12 = add(P1, P2);
+		Matrix res21 = add(P3, P4);
+		Matrix res22 = subtract(subtract(add(P1, P5), P3), P7);
+		
+		// Concatenate the subresults into the final result.
+		Matrix res = catMatrix(res11, res12, res21, res22);
+		
+		return res;
+	}
+	
+	@Override
+	public String toString() {
+		String res = String.format("DIMS: %dx%d\n", this.y_dim, this.x_dim);
+		for(int i = 0; i < this.y_dim; i++) {
+			for(int j = 0; j < x_dim; j++) {
+				res += this.matrixArray[i][j] + " ";
+			}
+			res += "\n";
+		}
+		return res;
+	}
+}

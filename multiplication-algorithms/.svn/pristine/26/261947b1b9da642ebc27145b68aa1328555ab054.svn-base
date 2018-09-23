@@ -1,0 +1,13 @@
+Izvajanje testM-B-6
+  Log datoteka: testM-B-6.log
+  Izhod programa: testM-B-6.out
+  Ukazna vrstica: java Naloga2 mat dv 32
+  Izhodni status: 0
+  Realni cas izvajanja: 3921
+  Uporabniski cas izvajanja: 4103
+  Sistemski cas izvajanja: 267
+  Procesorski cas izvajanja: 4370
+Preverjanje testM-B-6
+  Izhodni status: ok
+  Standardni izhod: ok
+  Tocke: 1

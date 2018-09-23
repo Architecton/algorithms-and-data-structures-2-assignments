@@ -1,0 +1,12 @@
+Izvajanje testN-C-6
+  Log datoteka: testN-C-6.log
+  Izhod programa: testN-C-6.out
+  Ukazna vrstica: java Naloga2 num ka
+  Izhodni status: 1
+  Realni cas izvajanja: 139
+  Uporabniski cas izvajanja: 126
+  Sistemski cas izvajanja: 28
+  Procesorski cas izvajanja: 154
+Preverjanje testN-C-6
+  Izhodni status: err
+  Tocke: 0

@@ -1,0 +1,12 @@
+Izvajanje g-BT2
+  Log datoteka: g-BT2.log
+  Izhod programa: g-BT2.out
+  Ukazna vrstica: java Naloga3 bt -n 1000
+  Izhodni status: 1
+  Realni cas izvajanja: 184
+  Uporabniski cas izvajanja: 178
+  Sistemski cas izvajanja: 40
+  Procesorski cas izvajanja: 218
+Preverjanje g-BT2
+  Izhodni status: err
+  Tocke: 0

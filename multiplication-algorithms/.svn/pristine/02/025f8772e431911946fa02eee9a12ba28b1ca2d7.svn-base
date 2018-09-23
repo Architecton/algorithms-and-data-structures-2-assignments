@@ -1,0 +1,13 @@
+Izvajanje testM-B-4
+  Log datoteka: testM-B-4.log
+  Izhod programa: testM-B-4.out
+  Ukazna vrstica: java Naloga2 mat dv 6
+  Izhodni status: 0
+  Realni cas izvajanja: 336
+  Uporabniski cas izvajanja: 371
+  Sistemski cas izvajanja: 58
+  Procesorski cas izvajanja: 429
+Preverjanje testM-B-4
+  Izhodni status: ok
+  Standardni izhod: ok
+  Tocke: 1

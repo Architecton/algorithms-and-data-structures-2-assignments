@@ -1,0 +1,13 @@
+Izvajanje test-B-6
+  Log datoteka: test-B-6.log
+  Izhod programa: test-B-6.out
+  Ukazna vrstica: java Naloga1 trace hs down 100
+  Izhodni status: 0
+  Realni cas izvajanja: 404
+  Uporabniski cas izvajanja: 532
+  Sistemski cas izvajanja: 84
+  Procesorski cas izvajanja: 616
+Preverjanje test-B-6
+  Izhodni status: ok
+  Standardni izhod: err
+  Tocke: 0

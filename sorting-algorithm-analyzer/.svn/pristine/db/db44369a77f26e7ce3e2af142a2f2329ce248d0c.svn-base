@@ -1,0 +1,13 @@
+Izvajanje test-A-4
+  Log datoteka: test-A-4.log
+  Izhod programa: test-A-4.out
+  Ukazna vrstica: java Naloga1 trace hs up 14
+  Izhodni status: 0
+  Realni cas izvajanja: 182
+  Uporabniski cas izvajanja: 183
+  Sistemski cas izvajanja: 40
+  Procesorski cas izvajanja: 223
+Preverjanje test-A-4
+  Izhodni status: ok
+  Standardni izhod: err
+  Tocke: 0

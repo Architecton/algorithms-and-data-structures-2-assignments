@@ -1,0 +1,13 @@
+Izvajanje test-A-2
+  Log datoteka: test-A-2.log
+  Izhod programa: test-A-2.out
+  Ukazna vrstica: java Naloga1 trace ss up 14
+  Izhodni status: 0
+  Realni cas izvajanja: 202
+  Uporabniski cas izvajanja: 201
+  Sistemski cas izvajanja: 37
+  Procesorski cas izvajanja: 238
+Preverjanje test-A-2
+  Izhodni status: ok
+  Standardni izhod: ok
+  Tocke: 1

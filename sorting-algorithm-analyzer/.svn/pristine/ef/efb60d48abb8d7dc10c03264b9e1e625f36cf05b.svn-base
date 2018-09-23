@@ -1,0 +1,13 @@
+Izvajanje test-B-9
+  Log datoteka: test-B-9.log
+  Izhod programa: test-B-9.out
+  Ukazna vrstica: java Naloga1 trace ms up 100
+  Izhodni status: 0
+  Realni cas izvajanja: 282
+  Uporabniski cas izvajanja: 347
+  Sistemski cas izvajanja: 55
+  Procesorski cas izvajanja: 402
+Preverjanje test-B-9
+  Izhodni status: ok
+  Standardni izhod: err
+  Tocke: 0

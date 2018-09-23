@@ -1,0 +1,13 @@
+Izvajanje g-DP1
+  Log datoteka: g-DP1.log
+  Izhod programa: g-DP1.out
+  Ukazna vrstica: java Naloga3 dp
+  Izhodni status: 0
+  Realni cas izvajanja: 273
+  Uporabniski cas izvajanja: 326
+  Sistemski cas izvajanja: 47
+  Procesorski cas izvajanja: 373
+Preverjanje g-DP1
+  Izhodni status: ok
+  Standardni izhod: err
+  Tocke: 0

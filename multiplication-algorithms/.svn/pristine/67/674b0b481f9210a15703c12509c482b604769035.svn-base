@@ -1,0 +1,12 @@
+Izvajanje testN-A-2
+  Log datoteka: testN-A-2.log
+  Izhod programa: testN-A-2.out
+  Ukazna vrstica: java Naloga2 num os
+  Izhodni status: 1
+  Realni cas izvajanja: 147
+  Uporabniski cas izvajanja: 121
+  Sistemski cas izvajanja: 39
+  Procesorski cas izvajanja: 160
+Preverjanje testN-A-2
+  Izhodni status: err
+  Tocke: 0

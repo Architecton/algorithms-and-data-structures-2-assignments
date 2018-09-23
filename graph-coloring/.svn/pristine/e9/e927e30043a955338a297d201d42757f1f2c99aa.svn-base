@@ -1,0 +1,12 @@
+Izvajanje g-BT3
+  Log datoteka: g-BT3.log
+  Izhod programa: g-BT3.out
+  Ukazna vrstica: java Naloga3 bt
+  Izhodni status: 1
+  Realni cas izvajanja: 185
+  Uporabniski cas izvajanja: 175
+  Sistemski cas izvajanja: 49
+  Procesorski cas izvajanja: 224
+Preverjanje g-BT3
+  Izhodni status: err
+  Tocke: 0

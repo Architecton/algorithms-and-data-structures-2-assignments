@@ -1,0 +1,414 @@
+import java.util.Scanner;
+
+// class representing the matrix
+class Matrix implements MatFunctionality {
+	// attributes
+	private int[][] matrixArray;
+	private int y_dim;
+	private int x_dim;
+
+	// constructor for parsing the array from standard input
+	public Matrix(Scanner sc) {
+		this.y_dim = sc.nextInt();
+		this.x_dim = sc.nextInt();
+		
+		matrixArray = new int[y_dim][x_dim];
+		
+		for(int i = 0; i < y_dim; i++) {
+			for(int j = 0; j < x_dim; j++) {
+				matrixArray[i][j] = sc.nextInt();
+			}
+		}
+	}
+	
+	// constructor for initializing a "blank" matrix of zeros
+	public Matrix(int y_dim, int x_dim) {
+		this.y_dim = y_dim;
+		this.x_dim = x_dim;
+		this.matrixArray = new int[y_dim][x_dim];
+	}
+	
+	// multipliyByDefinition: Multiply the matrices using the definition of matrix multiplication
+	public Matrix multiplyByDefinition(Matrix mat) {
+		// compute result matrix dimensions
+		int y_dimension_res = this.y_dim;
+		int x_dimension_res = mat.x_dim;
+		
+		// initialize resulting matrix
+		Matrix res = new Matrix(y_dimension_res, x_dimension_res);
+		
+		// go over result rows
+		for(int x = 0; x < x_dimension_res; x++) {				
+			int el = 0;
+			// compute next element
+			for(int i = 0; i < this.y_dim; i++) {
+				for(int j = 0; j < this.x_dim; j++) {
+					el += this.matrixArray[i][j]*mat.matrixArray[j][x];
+				}
+				// add computed element to result matrix
+				res.matrixArray[i][x] = el;
+				el = 0;
+			}				 
+		}
+		
+		return res;
+	}
+	
+	// Multiply_NDC: multiply this matrix with Matrix mat using the naive divide and conquer approach.
+	public Matrix multiply_NDC(Matrix mat, int finishRecDim) {
+		
+		// Making sure both matrices are square of dimensions that are a power of two ////
+		
+		// Make sure both matrices are square and that the dimensions are a power of two
+		int new_dim_this = Math.max(this.y_dim, this.x_dim);
+		int new_dim_mat = Math.max(mat.x_dim, mat.y_dim);
+		int new_dim = Math.max(new_dim_this, new_dim_mat);
+		
+		while(!isPowerOfTwo(new_dim)) {
+			new_dim++;
+		}
+		
+		Matrix thisMatrixPadded = Matrix.makePaddedVersion(this, new_dim, new_dim);
+		Matrix matPadded = Matrix.makePaddedVersion(mat, new_dim, new_dim);
+		///////////////////////////////////////////////////////////////////////////////////
+		
+		// Call multiplication function.
+		Matrix res;
+		res = NDC(thisMatrixPadded, matPadded, finishRecDim);
+		
+		return res;
+	}
+	
+	// makePaddedVersion: enlarges matrix mat to dimensions y_dim x x_dim by padding it with zeros 
+	private static Matrix makePaddedVersion(Matrix mat, int y_dim, int x_dim) {
+		Matrix res = new Matrix(y_dim, x_dim);
+		for(int i = 0; i < mat.y_dim; i++) {
+			for(int j = 0; j < mat.x_dim; j++) {
+				res.matrixArray[i][j] = mat.matrixArray[i][j];
+			}
+		}
+		
+		return res;
+	}
+	
+	// NDC - the recursive Naive Divide and Conquer algorithm
+	private Matrix NDC(Matrix A, Matrix B, int finishRecDim) {
+		
+		// base case: matrices are of dimensions 1x1
+		if(A.y_dim == 1) {
+			Matrix res = new Matrix(1, 1);
+			res.matrixArray[0][0] = A.matrixArray[0][0] * B.matrixArray[0][0];
+			return res;
+		} else if(A.y_dim <= finishRecDim) {
+			// if reached max depth stop recurring and multiply by definition.
+			Matrix res = A.multiplyByDefinition(B);
+			return res;
+		}
+		
+		// Get submatrices.
+		Matrix A11 = extractSubmatrix(A, 11);
+		Matrix A12 = extractSubmatrix(A, 12);
+		Matrix A21 = extractSubmatrix(A, 21);
+		Matrix A22 = extractSubmatrix(A, 22);
+		Matrix B11 = extractSubmatrix(B, 11);
+		Matrix B12 = extractSubmatrix(B, 12);
+		Matrix B21 = extractSubmatrix(B, 21);
+		Matrix B22 = extractSubmatrix(B, 22);
+		
+		// Compute the subresults.
+		Matrix res_11_p1 = NDC(A11, B11, finishRecDim);
+		System.out.println(sumElements(res_11_p1));
+		Matrix res_11_p2 = NDC(A12, B21, finishRecDim);
+		System.out.println(sumElements(res_11_p2));
+		Matrix res11 = add(res_11_p1, res_11_p2);
+		
+		Matrix res_12_p1 = NDC(A11, B12, finishRecDim);
+		System.out.println(sumElements(res_12_p1));
+		Matrix res_12_p2 = NDC(A12, B22, finishRecDim);
+		System.out.println(sumElements(res_12_p2));
+		Matrix res12 = add(res_12_p1, res_12_p2);
+	
+		Matrix res_21_p1 = NDC(A21, B11, finishRecDim);
+		System.out.println(sumElements(res_21_p1));
+		Matrix res_21_p2 = NDC(A22, B21, finishRecDim);
+		System.out.println(sumElements(res_21_p2));
+		Matrix res21 = add(res_21_p1, res_21_p2);
+		
+		Matrix res_22_p1 = NDC(A21, B12, finishRecDim);
+		System.out.println(sumElements(res_22_p1));
+		Matrix res_22_p2 = NDC(A22, B22, finishRecDim);
+		System.out.println(sumElements(res_22_p2));
+		Matrix res22 = add(res_22_p1, res_22_p2);
+		
+		
+		// Concatenate the subresults into the final result.
+		Matrix res = catMatrix(res11, res12, res21, res22);
+		
+		return res;
+	}
+	
+	// add: Add matrices A and B
+	private Matrix add(Matrix A, Matrix B) {
+		
+		// Check if matrices' dimensions match.
+		if(A.x_dim != B.x_dim || A.y_dim != B.x_dim) {
+			throw new Error("add: dimension mismatch");
+		}
+		
+		// Add elements with same indices.
+		Matrix res = new Matrix(A.y_dim, A.x_dim);
+		for(int i = 0; i < A.y_dim; i++) {
+			for(int j = 0; j < B.x_dim; j++) {
+				res.matrixArray[i][j] = A.matrixArray[i][j] + B.matrixArray[i][j];
+			}
+		}
+		
+		return res;
+	}
+	
+	// subtract: Subtract matrices A and B
+	private Matrix subtract(Matrix A, Matrix B) {
+		
+		// Check if matrices' dimensions match.
+		if(A.x_dim != B.x_dim || A.y_dim != B.x_dim) {
+			throw new Error("add: dimension mismatch");
+		}
+		
+		// Add elements with same indices.
+		Matrix res = new Matrix(A.y_dim, A.x_dim);
+		for(int i = 0; i < A.y_dim; i++) {
+			for(int j = 0; j < B.x_dim; j++) {
+				res.matrixArray[i][j] = A.matrixArray[i][j] - B.matrixArray[i][j];
+			}
+		}
+		
+		return res;
+	}
+	
+	// extractSubmatrix: Extracts submatrix consisting of one quartet of the original matrix.
+	// The submatrix is specified by the index: [11 12; 21 22]
+	private Matrix extractSubmatrix(Matrix mat, int index) {
+		
+		// Check if matrix dimensions are a power of two
+		if(!isPowerOfTwo(mat.y_dim) || mat.x_dim != mat.y_dim) {
+			throw new Error("extractSubmatrix: passed matrix must be square with dimensions of a power of two");
+		}
+		
+		// Instantiate blank matrix for result.
+		Matrix res = new Matrix(mat.y_dim / 2, mat.x_dim / 2);
+		
+		// Extract submatrix specified by the index.
+		if(index == 11) {
+			
+			for(int i = 0; i < mat.y_dim / 2; i++) {
+				for(int j = 0; j < mat.x_dim / 2; j++) {
+					res.matrixArray[i][j] = mat.matrixArray[i][j];
+				}
+			}
+			
+		} else if(index == 12) {
+			
+			for(int i = 0; i < mat.y_dim / 2; i++) {
+				for(int j = mat.x_dim / 2; j < mat.x_dim; j++) {
+					res.matrixArray[i][j - mat.x_dim / 2] = mat.matrixArray[i][j];
+				}
+			}
+			
+		} else if(index == 21) {
+			
+			for(int i = mat.y_dim / 2; i < mat.y_dim; i++) {
+				for(int j = 0; j < mat.x_dim / 2; j++) {
+					res.matrixArray[i - mat.y_dim / 2][j] = mat.matrixArray[i][j];
+				}
+			}
+			
+		} else if(index == 22) {
+			
+			for(int i = mat.y_dim / 2; i < mat.y_dim; i++) {
+				for(int j = mat.x_dim / 2; j < mat.x_dim; j++) {
+					res.matrixArray[i - mat.y_dim / 2][j - mat.x_dim / 2] = mat.matrixArray[i][j];
+				}
+			}
+			
+		}
+		
+		return res;
+	}
+	
+	// catMatrix: Concatenates matrices A, B, C and D into a single square matrix as [A B; C D]
+	// A, B, C and D should be square matrices
+	private Matrix catMatrix(Matrix A, Matrix B, Matrix C, Matrix D) {
+		
+		// Make blank matrix for result.
+		int y_dim_res = A.y_dim * 2;
+		int x_dim_res = A.x_dim * 2;
+		Matrix res = new Matrix(y_dim_res, x_dim_res);
+		
+		// Copy submatrix elements into the resulting matrix
+		
+		// submatrix A
+		for(int i = 0; i < y_dim_res / 2; i++) {
+			for(int j = 0; j < x_dim_res / 2; j++) {
+				res.matrixArray[i][j] = A.matrixArray[i][j]; 
+			}
+		}
+		
+		// submatrix B
+		for(int i = 0; i < y_dim_res / 2; i++) {
+			for(int j = x_dim_res / 2; j < x_dim_res; j++) {
+				res.matrixArray[i][j] = B.matrixArray[i][j - x_dim_res / 2];
+			}
+		}
+		
+		// submatrix C
+		for(int i = y_dim_res / 2; i < y_dim_res; i++) {
+			for(int j = 0; j < x_dim_res / 2; j++) {
+				res.matrixArray[i][j] = C.matrixArray[i - y_dim_res / 2][j];
+			}
+		}
+		
+		// submatrix D
+		for(int i = y_dim_res / 2; i < y_dim_res; i++) {
+			for(int j = x_dim_res / 2; j < x_dim_res; j++) {
+				res.matrixArray[i][j] = D.matrixArray[i - y_dim_res / 2][j - x_dim_res / 2];
+			}
+		}
+		
+		return res;
+	}
+	
+	// isPowerOfTwo: Check if integer num is a power of two
+	private boolean isPowerOfTwo(int num) {
+		if(num > 0) {
+			return (num & (num - 1)) == 0;
+		} else {
+			return false;
+		}
+	}
+	
+	
+	// sumElements: sum the elements in the matrix mat
+	private int sumElements(Matrix mat) {
+		int sum = 0;
+		for(int i = 0; i < mat.y_dim; i++) {
+			for(int j = 0; j < mat.x_dim; j++) {
+				sum += mat.matrixArray[i][j];
+			}
+		}
+		return sum;
+	}
+	
+	// strassenMultiply: Multiply this matrix with matrix mat using the Strassen algorithem
+	public Matrix strassenMultipy(Matrix mat, int finishRecDim) {
+
+		// Make sure both matrices are square and that the dimensions are a power of two
+		int new_dim_this = Math.max(this.y_dim, this.x_dim);
+		int new_dim_mat = Math.max(mat.x_dim, mat.y_dim);
+		int new_dim = Math.max(new_dim_this, new_dim_mat);
+		
+		while(!isPowerOfTwo(new_dim)) {
+			new_dim++;
+		}
+		
+		Matrix thisMatrixPadded = Matrix.makePaddedVersion(this, new_dim, new_dim);
+		Matrix matPadded = Matrix.makePaddedVersion(mat, new_dim, new_dim);
+		///////////////////////////////////////////////////////////////////////////////////
+		
+		// Compute the product
+		Matrix res = strassen(thisMatrixPadded, matPadded, finishRecDim);
+		
+		return res;
+	}
+	
+	// strassen - the recursive Strassen matrix multiplication algorithm
+	private Matrix strassen(Matrix A, Matrix B, int finishRecDim) {
+		
+		if(A.y_dim <= finishRecDim) {
+			Matrix res = A.multiplyByDefinition(B);
+			return res;
+		}
+		
+		
+		// Get submatrices.
+		Matrix A11 = extractSubmatrix(A, 11);
+		Matrix A12 = extractSubmatrix(A, 12);
+		Matrix A21 = extractSubmatrix(A, 21);
+		Matrix A22 = extractSubmatrix(A, 22);
+		Matrix B11 = extractSubmatrix(B, 11);
+		Matrix B12 = extractSubmatrix(B, 12);
+		Matrix B21 = extractSubmatrix(B, 21);
+		Matrix B22 = extractSubmatrix(B, 22);
+		
+		// Base case
+		if(A11.y_dim == 1) {
+			int A11_val = A11.matrixArray[0][0];
+			int A12_val = A12.matrixArray[0][0];
+			int A21_val = A21.matrixArray[0][0];
+			int A22_val = A22.matrixArray[0][0];
+			int B11_val = B11.matrixArray[0][0];
+			int B12_val = B12.matrixArray[0][0];
+			int B21_val = B21.matrixArray[0][0];
+			int B22_val = B22.matrixArray[0][0];
+			
+			int p1 = A11_val*(B12_val - B22_val);
+			System.out.println(p1);
+			int p2 = (A11_val + A12_val)*B22_val;
+			System.out.println(p2);
+			int p3 = (A21_val + A22_val)*B11_val;
+			System.out.println(p3);
+			int p4 = A22_val*(B21_val - B11_val);
+			System.out.println(p4);
+			int p5 = (A11_val+ A22_val)*(B11_val + B22_val);
+			System.out.println(p5);
+			int p6 = (A12_val - A22_val)*(B21_val + B22_val);
+			System.out.println(p6);
+			int p7 = (A11_val - A21_val)*(B11_val + B12_val);
+			System.out.println(p7);
+			
+			Matrix res = new Matrix(2, 2);
+			res.matrixArray[0][0] = p5 + p4 - p2 + p6;
+			res.matrixArray[0][1] = p1 + p2;
+			res.matrixArray[1][0] = p3 + p4;
+			res.matrixArray[1][1] = p1 + p5 - p3 - p7;
+			
+			return res;
+		}
+		
+		Matrix P1 = strassen(A11, subtract(B12, B22), finishRecDim);
+		System.out.println(sumElements(P1));
+		Matrix P2 = strassen(add(A11, A12), B22, finishRecDim);
+		System.out.println(sumElements(P2));
+		Matrix P3 = strassen(add(A21, A22), B11, finishRecDim);
+		System.out.println(sumElements(P3));
+		Matrix P4 = strassen(A22, subtract(B21, B11), finishRecDim);
+		System.out.println(sumElements(P4));
+		Matrix P5 = strassen(add(A11, A22), add(B11, B22), finishRecDim);
+		System.out.println(sumElements(P5));
+		Matrix P6 = strassen(subtract(A12, A22), add(B21, B22), finishRecDim);
+		System.out.println(sumElements(P6));
+		Matrix P7 = strassen(subtract(A11, A21), add(B11, B12), finishRecDim);
+		System.out.println(sumElements(P7));
+		
+		Matrix res11 = add(subtract(add(P5, P4), P2), P6);
+		Matrix res12 = add(P1, P2);
+		Matrix res21 = add(P3, P4);
+		Matrix res22 = subtract(subtract(add(P1, P5), P3), P7);
+		
+		// Concatenate the subresults into the final result.
+		Matrix res = catMatrix(res11, res12, res21, res22);
+		
+		return res;
+	}
+	
+	@Override
+	public String toString() {
+		String res = String.format("DIMS: %dx%d\n", this.y_dim, this.x_dim);
+		for(int i = 0; i < this.y_dim; i++) {
+			for(int j = 0; j < x_dim; j++) {
+				res += this.matrixArray[i][j] + " ";
+			}
+			res += "\n";
+		}
+		return res;
+	}
+}
